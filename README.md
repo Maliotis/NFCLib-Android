@@ -27,7 +27,7 @@ dependencies {
 
 ### A simple usage of the library to read from a tag
 
-*Don't enable NFC in the foreground in the `onCreate` method instead enable it in `onResume` or during time i.e press of a button*
+*Don't enable NFC in the foreground in the `onCreate` method instead enable it in `onResume` or during i.e press of a button*
 
 ```Kotlin
 
