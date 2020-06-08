@@ -1,0 +1,3 @@
+rootProject.name='NFCLib'
+include ':app'
+include ':library'
