@@ -1,6 +1,8 @@
 # NFCLib-Android
 An easy to use NFC library for Android to read Ndef-Tags in the foreground. It's meant to be used by inexperienced and experienced developers alike as it allows full customization. 
 
+Checkout the NfcLib for iOS [NfcLib-iOS](https://github.com/Maliotis/NfcLib-iOS)
+
 ## Setup
 
 Gradle: [![](https://jitpack.io/v/Maliotis/NFCLib-Android.svg)](https://jitpack.io/#Maliotis/NFCLib-Android)
@@ -27,7 +29,7 @@ dependencies {
 
 ### A simple usage of the library to read from a tag
 
-*Don't enable NFC in the foreground in the `onCreate` method instead enable it in `onResume` or during time i.e press of a button*
+*Don't enable NFC in the foreground in the `onCreate` method instead enable it in `onResume` or during i.e press of a button*
 
 ```Kotlin
 
@@ -291,6 +293,7 @@ writeNFC.ndefFunction = {
 ```
 
 ### For further reading please visit anrdroid developers site [Android-NFC](https://developer.android.com/guide/topics/connectivity/nfc)
+
 
 ## License
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
