@@ -23,16 +23,54 @@ android {
         }
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.2'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'androidx.test:core-ktx:1.3.0'
+    testImplementation 'androidx.test:runner:1.3.0'
+    testImplementation 'androidx.test:rules:1.3.0'
+    testImplementation 'androidx.test.ext:junit:1.1.2'
+    testImplementation 'androidx.test.ext:truth:1.3.0'
+    testImplementation 'com.google.truth:truth:1.1'
 
-    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.3.72'
+    // Core library
+    androidTestImplementation 'androidx.test:core-ktx:1.3.0'
+
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+
+    //Mockito
+    androidTestImplementation 'org.mockito.kotlin:mockito-kotlin:3.1.0'
+
+    // Assertions
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.ext:truth:1.3.0'
+    androidTestImplementation 'com.google.truth:truth:1.1'
+
+    // Espresso dependencies
+//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+//    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
+//    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
+//    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.3.0'
+//    androidTestImplementation 'androidx.test.espresso:espresso-web:3.3.0'
+//    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.3.0'
+
+
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.4.21'
 }

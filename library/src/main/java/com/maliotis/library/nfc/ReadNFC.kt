@@ -11,6 +11,7 @@ import android.util.Log
 import com.maliotis.library.NfcTech.MIFARE_CLASSIC
 import com.maliotis.library.NfcTech.MIFARE_ULTRALIGHT
 import com.maliotis.library.NfcTech.NDEF
+import com.maliotis.library.NfcTech.NDEF_FORMATTABLE
 import com.maliotis.library.NfcTech.NFCA
 import com.maliotis.library.NfcTech.NFCB
 import com.maliotis.library.NfcTech.NFCF
@@ -26,12 +27,12 @@ import kotlin.experimental.and
 /**
  * Created by petrosmaliotis on 29/05/2020.
  */
-class ReadNFC : ReadNFCI {
+class ReadNFC internal constructor(): ReadNFCI {
     override var activityContext: Activity? = null
     override var nfcManager: NfcManager? = null
 
     override var nfcTech: Class<out TagTechnology> = NDEF
-    private var ndefMessage: NdefMessage? = null
+    internal var ndefMessage: NdefMessage? = null
     // Language code from Text based payload
     var languageCode = ""
 
@@ -47,6 +48,8 @@ class ReadNFC : ReadNFCI {
             val technologies = tag.techList
             val tagTechs = listOf(*technologies)
             val nfcTechName = nfcTech.canonicalName
+
+            Log.d("TAG", "attemptConnect: tagTechs = ${tagTechs.toString()}")
 
             if (tagTechs.contains(nfcTechName) && nfcTech == NDEF) {
                 ndefMessage = ndefFunction(tag)
