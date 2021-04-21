@@ -64,12 +64,12 @@ dependencies {
     androidTestImplementation 'com.google.truth:truth:1.1'
 
     // Espresso dependencies
-//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-//    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
-//    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
-//    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.3.0'
-//    androidTestImplementation 'androidx.test.espresso:espresso-web:3.3.0'
-//    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.3.0'
+    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.3.0'
 
 
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.4.21'
