@@ -88,7 +88,7 @@ class SmallTests {
 
         val firstRecord = createRecordURI(uriFirstRecord)
         val secondRecord = createRecordURI(uriSecondRecord)
-
+        
         val ndefMessage = NdefMessage(firstRecord, secondRecord)
         val readNFC = ReadNFC()
         readNFC.ndefMessage = ndefMessage
