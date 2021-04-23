@@ -1,5 +1,6 @@
 package com.maliotis.library.factories
 
+import android.app.Activity
 import android.content.Intent
 import com.maliotis.library.nfc.WriteNFC
 
@@ -8,10 +9,10 @@ import com.maliotis.library.nfc.WriteNFC
  */
 class WriteNFCFactory: NFCFactory<WriteNFC>() {
 
-    override fun getNFC(): WriteNFC {
+    override fun getNFC(activity: Activity): WriteNFC {
         val writeNFC = WriteNFC()
         writeNFC.let {
-            it.activityContext = activityContext
+            it.activityContext = activity
             it.nfcManager = nfcManager
         }
 

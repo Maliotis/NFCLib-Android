@@ -27,14 +27,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val readNfcFactory = NFCFactory.create<ReadNFC>(this)
-        val writeNfcFactory = NFCFactory.create<WriteNFC>(this)
+        readNFC = NFCFactory.create(this)
+        writeNFC = NFCFactory.create(this)
 
-        readNFC = readNfcFactory.getNFC()
-        readNFC?.enableNFCInForeground()
-
+        readNFC.enableNFCInForeground()
         // No need to enable NFC in foreground again..
-        writeNFC = writeNfcFactory.getNFC()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -21,7 +21,7 @@ import java.util.*
 /**
  * Created by petrosmaliotis on 29/05/2020.
  */
-class WriteNFC: WriteNFCI {
+class WriteNFC internal constructor(): WriteNFCI {
     private val TAG = WriteNFC::class.java.canonicalName
 
     override var activityContext: Activity? = null

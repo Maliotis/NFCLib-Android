@@ -14,9 +14,8 @@ import kotlin.reflect.KClass
  * Created by petrosmaliotis on 28/05/2020.
  */
 abstract class NFCFactory<T: NFC> {
-    abstract fun getNFC(): T
+    abstract fun getNFC(activity: Activity): T
     abstract fun handleIntent(intent: Intent)
-
 
 
     companion object {
@@ -25,18 +24,12 @@ abstract class NFCFactory<T: NFC> {
         @PublishedApi internal
         var nfcManager: NfcManager? = null
 
-        @JvmStatic
-        @PublishedApi internal
-        var activityContext: Activity? = null
-
-
-        inline fun <reified T: NFC>create(activity: Activity): NFCFactory<T> {
-            this.activityContext = activity
+        inline fun <reified T: NFC>create(activity: Activity): T {
             this.nfcManager = activity.getSystemService(Context.NFC_SERVICE) as NfcManager
 
             return when (T::class) {
-                ReadNFC::class -> ReadNFCFactory() as NFCFactory<T>
-                WriteNFC::class -> WriteNFCFactory() as NFCFactory<T>
+                ReadNFC::class -> ReadNFCFactory().getNFC(activity) as T
+                WriteNFC::class -> WriteNFCFactory().getNFC(activity) as T
                 else -> throw IllegalArgumentException()
             }
         }
@@ -45,13 +38,12 @@ abstract class NFCFactory<T: NFC> {
          * Java alternative method
          */
         @JvmStatic
-        fun <T: NFC> create(typeOf: Class<T>, activity: Activity): NFCFactory<T> {
-            this.activityContext = activity
+        fun <T: NFC> create(typeOf: Class<T>, activity: Activity): T {
             this.nfcManager = activity.getSystemService(Context.NFC_SERVICE) as NfcManager
 
             return when (typeOf) {
-                ReadNFC::javaClass -> ReadNFCFactory() as NFCFactory<T>
-                WriteNFC::javaClass -> WriteNFCFactory() as NFCFactory<T>
+                ReadNFC::javaClass -> ReadNFCFactory().getNFC(activity) as T
+                WriteNFC::javaClass -> WriteNFCFactory().getNFC(activity) as T
                 else -> throw IllegalArgumentException()
             }
         }
