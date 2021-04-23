@@ -27,7 +27,7 @@ class SmallTests {
         val scenario = launchActivity<TestActivityForNFCLib>()
         scenario.onActivity { activity ->
             val readNFCFactory = NFCFactory.create<ReadNFC>(activity)
-            assertThat(readNFCFactory::class.java).isEqualTo(ReadNFCFactory::class.java)
+            assertThat(readNFCFactory::class.java).isEqualTo(ReadNFC::class.java)
         }
     }
 
@@ -36,7 +36,7 @@ class SmallTests {
         val scenario = launchActivity<TestActivityForNFCLib>()
         scenario.onActivity { activity ->
             val writeNFCFactory = NFCFactory.create<WriteNFC>(activity)
-            assertThat(writeNFCFactory::class.java).isEqualTo(WriteNFCFactory::class.java)
+            assertThat(writeNFCFactory::class.java).isEqualTo(WriteNFC::class.java)
         }
     }
 
