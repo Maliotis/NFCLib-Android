@@ -38,7 +38,7 @@ private lateinit var readNFC: ReadNFC
 override fun onResume() {
         super.onResume()
         //...
-        readNFC = NFCFactory.create<ReadNFC>(this).getNFC()
+        readNFC = NFCFactory.create<ReadNFC>(this)
         readNFC.enableNFCInForeground()
 }
 
@@ -64,7 +64,7 @@ private lateinit var writeNFC: WriteNFC
 override fun onResume() {
         super.onResume()
         //...
-        writeNFC = NFCFactory.create<WriteNFC>(this).getNFC()
+        writeNFC = NFCFactory.create<WriteNFC>(this)
         writeNFC.enableNFCInForeground()
 }
 
@@ -92,8 +92,8 @@ private var flagRead = true
 
 override fun onResume() {
         super.onResume()
-        readNFC = NFCFactory.create<ReadNFC>(this).getNFC()
-        writeNFC = NFCFactory.create<WriteNFC>(this).getNFC()
+        readNFC = NFCFactory.create<ReadNFC>(this)
+        writeNFC = NFCFactory.create<WriteNFC>(this)
         // use only one object to enable nfc in foreground
         writeNFC.enableNFCInForeground()
 }
