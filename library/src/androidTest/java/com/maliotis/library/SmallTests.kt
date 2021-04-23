@@ -6,8 +6,6 @@ import androidx.test.core.app.launchActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import com.maliotis.library.factories.NFCFactory
-import com.maliotis.library.factories.ReadNFCFactory
-import com.maliotis.library.factories.WriteNFCFactory
 import com.maliotis.library.nfc.ReadNFC
 import com.maliotis.library.nfc.WriteNFC
 import org.junit.Test
