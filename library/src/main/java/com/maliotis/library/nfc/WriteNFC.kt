@@ -66,8 +66,8 @@ class WriteNFC: WriteNFCI {
      * Connects to the Tag without closing the connection
      */
     override fun connect(intent: Intent) {
-        val tag: Tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
-        connectInterface.attemptConnect(tag)
+        val tag: Tag? = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+        connectInterface.attemptConnect(tag!!)
     }
 
     override fun close() {
