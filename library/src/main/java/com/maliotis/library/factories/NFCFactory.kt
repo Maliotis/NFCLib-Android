@@ -1,5 +1,6 @@
 package com.maliotis.library.factories
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -37,6 +38,7 @@ abstract class NFCFactory<T: NFC> {
         /**
          * Java alternative method
          */
+        @Suppress("UNCHECKED_CAST")
         @JvmStatic
         fun <T: NFC> create(typeOf: Class<T>, activity: Activity): T {
             this.nfcManager = activity.getSystemService(Context.NFC_SERVICE) as NfcManager

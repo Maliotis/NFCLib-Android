@@ -39,8 +39,7 @@ class LargeTests {
         val scenario = launchActivity<TestActivityForNFCLib>()
         scenario.moveToState(Lifecycle.State.RESUMED)
         scenario.onActivity { activity ->
-            val readNFCFactory = NFCFactory.create<ReadNFC>(activity)
-            val readNFC = readNFCFactory.getNFC()
+            val readNFC = NFCFactory.create<ReadNFC>(activity)
             readNFC.enableNFCInForeground()
 
             val ndefBundle = Bundle()
