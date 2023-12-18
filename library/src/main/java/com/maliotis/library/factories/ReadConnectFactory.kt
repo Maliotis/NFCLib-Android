@@ -39,9 +39,7 @@ class ReadConnectFactory {
         val mifareClassicFunction: ReadMifareClassicInterface = { tag ->
             val mifareClassicTag = MifareClassic.get(tag)
 
-            mifareClassicTag.let {
-                it.connect()
-            }
+            mifareClassicTag.connect()
         }
     }
 }

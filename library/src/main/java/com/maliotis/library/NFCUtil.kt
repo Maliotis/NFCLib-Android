@@ -1,15 +1,12 @@
 package com.maliotis.library
 
-import android.net.Uri
 import android.nfc.NdefRecord
 import android.nfc.NdefRecord.TNF_ABSOLUTE_URI
 import java.nio.charset.Charset
 import java.util.*
 
 
-/**
- * Create record with type [NdefRecord.TNF_WELL_KNOWN]
- */
+/** Create record with type [NdefRecord.TNF_WELL_KNOWN] */
 internal fun createRecordText(text: String, locale: Locale, encodeInUtf8: Boolean): NdefRecord {
 
     val langBytes: ByteArray = locale.language.toByteArray(Charsets.US_ASCII)
@@ -24,7 +21,10 @@ internal fun createRecordText(text: String, locale: Locale, encodeInUtf8: Boolea
     return NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, ByteArray(0), data)
 }
 
-internal fun createRecordURI(uri: String, charset: Charset =  Charset.forName("US-ASCII")): NdefRecord {
+internal fun createRecordURI(
+    uri: String,
+    charset: Charset = Charset.forName("US-ASCII")
+): NdefRecord {
     return ByteArray(0).let { emptyByteArray ->
         NdefRecord(
             TNF_ABSOLUTE_URI,

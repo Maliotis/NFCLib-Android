@@ -1,12 +1,17 @@
 package com.maliotis.library.typealiases
 
-import android.nfc.NdefMessage
 import android.nfc.Tag
-import android.nfc.tech.*
+import android.nfc.tech.IsoDep
+import android.nfc.tech.MifareClassic
+import android.nfc.tech.MifareUltralight
+import android.nfc.tech.Ndef
+import android.nfc.tech.NfcA
+import android.nfc.tech.NfcB
+import android.nfc.tech.NfcBarcode
+import android.nfc.tech.NfcF
+import android.nfc.tech.NfcV
 
-/**
- * Created by petrosmaliotis on 03/06/2020.
- */
+/** Created by petrosmaliotis on 03/06/2020. */
 
 typealias WriteNdefInterface = (Tag) -> Ndef
 

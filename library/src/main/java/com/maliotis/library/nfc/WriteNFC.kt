@@ -8,6 +8,7 @@ import android.nfc.tech.MifareClassic
 import android.nfc.tech.Ndef
 import android.nfc.tech.NdefFormatable
 import android.nfc.tech.TagTechnology
+import android.os.Build
 import android.util.Log
 import com.maliotis.library.NfcTech
 import com.maliotis.library.factories.WriteConnectFactory
@@ -51,7 +52,7 @@ class WriteNFC internal constructor(): WriteNFCI {
             if (tagTechs.contains(nfcTechName) && nfcTech == NfcTech.NDEF) {
                 tagTechnology = ndefFunction(tag)
 
-            } else if (tagTechs.contains(nfcTechName) && nfcTech == NfcTech.NDEF_FORMATTABLE) {
+            } else if (tagTechs.contains(nfcTechName) && nfcTech == NfcTech.NDEF_FORMATABLE) {
 
             } else if (tagTechs.contains(nfcTechName) && nfcTech == NfcTech.MIFARE_CLASSIC) {
                 // TODO
@@ -66,7 +67,12 @@ class WriteNFC internal constructor(): WriteNFCI {
      * Connects to the Tag without closing the connection
      */
     override fun connect(intent: Intent) {
-        val tag: Tag? = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+        val tag: Tag? = if (Build.VERSION.SDK_INT >= 33) {
+            intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+        }
         connectInterface.attemptConnect(tag!!)
     }
 
@@ -148,7 +154,7 @@ class WriteNFC internal constructor(): WriteNFCI {
         val utfBit: Int = if (utfEncoding == Charsets.UTF_8) 0 else 1 shl 7
         val status = (utfBit + langBytes.size).toChar()
         val data = ByteArray(1 + langBytes.size + textBytes.size)
-        data[0] = status.toByte()
+        data[0] = status.code.toByte()
         System.arraycopy(langBytes, 0, data, 1, langBytes.size)
         System.arraycopy(textBytes, 0, data, 1 + langBytes.size, textBytes.size)
         return NdefRecord(tnf, typeRecord, ByteArray(0), data)
