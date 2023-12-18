@@ -10,7 +10,7 @@ import androidx.annotation.StringDef
 
 object NfcTech {
      val NDEF: Class<Ndef> = Ndef::class.java
-     val NDEF_FORMATTABLE: Class<NdefFormatable> = NdefFormatable::class.java
+     val NDEF_FORMATABLE: Class<NdefFormatable> = NdefFormatable::class.java
      val NFCA: Class<NfcA> = NfcA::class.java
      val NFCB: Class<NfcB> = NfcB::class.java
      val NFCF: Class<NfcF> = NfcF::class.java

@@ -2,6 +2,7 @@ package com.maliotis.library.interfaces
 
 import android.app.Activity
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -27,7 +28,7 @@ interface NFC {
     fun enableNFCInForeground() {
         val pendingIntent = PendingIntent.getActivity(
             activityContext, 0,
-            Intent(activityContext, activityContext?.javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0
+            Intent(activityContext, activityContext?.javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), FLAG_IMMUTABLE
         )
         val tagDetected = IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED)
         val ndefDetected = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED)

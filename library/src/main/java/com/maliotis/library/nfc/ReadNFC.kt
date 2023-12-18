@@ -2,16 +2,31 @@ package com.maliotis.library.nfc
 
 import android.app.Activity
 import android.content.Intent
-import android.nfc.*
-import android.nfc.NdefRecord.*
-import android.nfc.tech.Ndef
-import android.nfc.tech.NfcA
+import android.nfc.NdefMessage
+import android.nfc.NdefRecord
+import android.nfc.NdefRecord.RTD_ALTERNATIVE_CARRIER
+import android.nfc.NdefRecord.RTD_HANDOVER_CARRIER
+import android.nfc.NdefRecord.RTD_HANDOVER_REQUEST
+import android.nfc.NdefRecord.RTD_HANDOVER_SELECT
+import android.nfc.NdefRecord.RTD_SMART_POSTER
+import android.nfc.NdefRecord.RTD_TEXT
+import android.nfc.NdefRecord.RTD_URI
+import android.nfc.NdefRecord.TNF_ABSOLUTE_URI
+import android.nfc.NdefRecord.TNF_EMPTY
+import android.nfc.NdefRecord.TNF_EXTERNAL_TYPE
+import android.nfc.NdefRecord.TNF_MIME_MEDIA
+import android.nfc.NdefRecord.TNF_UNCHANGED
+import android.nfc.NdefRecord.TNF_UNKNOWN
+import android.nfc.NdefRecord.TNF_WELL_KNOWN
+import android.nfc.NfcAdapter
+import android.nfc.NfcManager
+import android.nfc.Tag
 import android.nfc.tech.TagTechnology
+import android.os.Build
 import android.util.Log
 import com.maliotis.library.NfcTech.MIFARE_CLASSIC
 import com.maliotis.library.NfcTech.MIFARE_ULTRALIGHT
 import com.maliotis.library.NfcTech.NDEF
-import com.maliotis.library.NfcTech.NDEF_FORMATTABLE
 import com.maliotis.library.NfcTech.NFCA
 import com.maliotis.library.NfcTech.NFCB
 import com.maliotis.library.NfcTech.NFCF
@@ -24,15 +39,14 @@ import com.maliotis.library.typealiases.ReadNfcAInterface
 import java.util.*
 import kotlin.experimental.and
 
-/**
- * Created by petrosmaliotis on 29/05/2020.
- */
-class ReadNFC internal constructor(): ReadNFCI {
+/** Created by petrosmaliotis on 29/05/2020. */
+class ReadNFC internal constructor() : ReadNFCI {
     override var activityContext: Activity? = null
     override var nfcManager: NfcManager? = null
 
     override var nfcTech: Class<out TagTechnology> = NDEF
     internal var ndefMessage: NdefMessage? = null
+
     // Language code from Text based payload
     var languageCode = ""
 
@@ -40,10 +54,8 @@ class ReadNFC internal constructor(): ReadNFCI {
     var nfcAFunction: ReadNfcAInterface = ReadConnectFactory.nfcAFunction
 
 
-    /**
-     * Override this method to implement your own behaviour
-     */
-    var connectInterface: ConnectInterface = object: ConnectInterface {
+    /** Override this method to implement your own behaviour */
+    var connectInterface: ConnectInterface = object : ConnectInterface {
         override fun attemptConnect(tag: Tag) {
             val technologies = tag.techList
             val tagTechs = listOf(*technologies)
@@ -72,37 +84,34 @@ class ReadNFC internal constructor(): ReadNFCI {
 
     }
 
-    /**
-     * Connects to read the cachedMessage and closes the connection immediately
-     */
+    /** Connects to read the cachedMessage and closes the connection immediately */
     override fun connect(intent: Intent) {
-        val tag: Tag? = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+        val tag: Tag? =  if (Build.VERSION.SDK_INT >= 33) {
+            intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+        }
         connectInterface.attemptConnect(tag!!)
     }
 
-    /**
-     * Returns the NDEFMessage.
-     */
+    /** Returns the NDEFMessage. */
     override fun message(): NdefMessage? {
         return ndefMessage
     }
 
-    /**
-     * Returns the NDEFRecords.
-     */
+    /** Returns the NDEFRecords. */
     override fun records(): Array<NdefRecord>? {
         return ndefMessage?.records
     }
 
-    /**
-     * Returns the payload (content) of the NFC TAG.
-     */
+    /** Returns the payload (content) of the NFC TAG. */
     override fun payload(): Array<String> {
 
         // init with empty strings
-        val payload = Array<String>(ndefMessage?.records?.size ?: 0) { "" }
+        val payload = Array(ndefMessage?.records?.size ?: 0) { "" }
 
-        ndefMessage?.records?.forEachIndexed { index,  ndefRecord ->
+        ndefMessage?.records?.forEachIndexed { index, ndefRecord ->
             val payloadBytes = ndefRecord.payload
             when (ndefRecord.tnf) {
                 // Absolute URI can be either URN, URI, URL
@@ -130,14 +139,19 @@ class ReadNFC internal constructor(): ReadNFCI {
                     Log.d("TAG", "payload: TNF_MIME_MEDIA")
                     val type = String(ndefRecord.type, Charsets.UTF_8)
                     Log.d("TAG", "payload: type = $type")
-                    if (type == "text/html") {
-                        payload[index] = String(ndefRecord.payload, Charsets.UTF_8)
-                    } else if (type == "text/json") {
+                    when (type) {
+                        "text/html" -> {
+                            payload[index] = String(ndefRecord.payload, Charsets.UTF_8)
+                        }
+                        "text/json" -> {
 
-                    } else if (type == "image/gif") {
+                        }
+                        "image/gif" -> {
 
-                    } else {
-                        payload[index] = String(ndefRecord.payload, Charsets.UTF_8)
+                        }
+                        else -> {
+                            payload[index] = String(ndefRecord.payload, Charsets.UTF_8)
+                        }
                     }
                 }
 
@@ -157,11 +171,18 @@ class ReadNFC internal constructor(): ReadNFCI {
                     if (Arrays.equals(type, RTD_TEXT)) {
 
                         // Text
-                        val isUTF8: Boolean = payloadBytes[0] and 0x080.toByte() == 0.toByte() //status byte: bit 7 indicates encoding (0 = UTF-8, 1 = UTF-16)
-                        val languageLength: Int = (payloadBytes[0] and 0x03F.toByte()).toInt() //status byte: bits 5..0 indicate length of language code
+                        val isUTF8: Boolean =
+                            payloadBytes[0] and 0x080.toByte() == 0.toByte() //status byte: bit 7 indicates encoding (0 = UTF-8, 1 = UTF-16)
+                        val languageLength: Int =
+                            (payloadBytes[0] and 0x03F.toByte()).toInt() //status byte: bits 5..0 indicate length of language code
                         val textLength: Int = payloadBytes.size - 1 - languageLength
                         val utf = if (isUTF8) Charsets.UTF_8 else Charsets.UTF_16
-                        val langCode = String(payloadBytes, 1, languageLength, Charsets.US_ASCII)// not sure about ASCII here
+                        val langCode = String(
+                            payloadBytes,
+                            1,
+                            languageLength,
+                            Charsets.US_ASCII
+                        )// not sure about ASCII here
                         payload[index] = String(payloadBytes, 1 + languageLength, textLength, utf)
 
                     } else if (Arrays.equals(type, RTD_URI)) {
